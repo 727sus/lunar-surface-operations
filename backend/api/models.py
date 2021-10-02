@@ -7,7 +7,7 @@ class Log(models.Model):
     title = models.CharField("Title", max_length=255)
     log_text = models.TextField("Log Text", default="")
     datetime = models.DateTimeField(auto_now_add=True)
-    #author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     other_fields = models.JSONField(default=dict)
     perm_save = models.BooleanField(default=False)
 
