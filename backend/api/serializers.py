@@ -6,6 +6,7 @@ from .models import File, Log
 
 class LogSerializer(serializers.ModelSerializer):
     author = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    files = serializers.StringRelatedField(many=True, required=False)
 
     class Meta:
         model = Log
@@ -14,3 +15,10 @@ class LogSerializer(serializers.ModelSerializer):
             "author": {"read_only": True},
             "datetime": {"read_only": True},
         }
+
+
+class FileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = File
+        fields = "__all__"

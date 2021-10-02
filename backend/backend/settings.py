@@ -128,6 +128,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+
 STATIC_URL = '/static/'
 
 # Default primary key field type
@@ -149,3 +150,6 @@ REST_USE_JWT = True
 
 JWT_AUTH_COOKIE = 'access-token'
 JWT_AUTH_REFRESH_COOKIE = 'refresh-token'
+
+MEDIA_ROOT = BASE_DIR.joinpath("media")
+MEDIA_URL = "/media/"

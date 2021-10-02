@@ -3,9 +3,11 @@ from rest_framework import permissions, serializers
 from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import LogSerializer
-from .models import Log
-from rest_framework.parsers import DataAndFiles, FileUploadParser
+from .serializers import LogSerializer, FileSerializer
+from .models import Log, File
+from rest_framework.parsers import FormParser, MultiPartParser, FileUploadParser
+from rest_framework.viewsets import ModelViewSet
+import json
 
 # Create your views here.
 
@@ -76,4 +78,16 @@ class LogView(RetrieveUpdateDestroyAPIView):
 
 class UploadFileView(CreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
-    parser_classes = (FileUploadParser,)
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request, *args, **kwargs):
+
+        data = request.data
+        data["file"] = request.FILES.get("file")
+        serializer = FileSerializer(data=data)
+        if serializer.is_valid():
+            file = serializer.save()
+            if file:
+                json = serializer.data
+                return Response(json, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
