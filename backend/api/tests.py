@@ -1,9 +1,13 @@
 from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
-from .models import Log
+
+from api.serializers import LogSerializer
+from .models import Log, File
 from rest_framework import status
 from django.urls import reverse
+from django.forms.models import model_to_dict
+
 
 # Create your tests here.
 
@@ -152,3 +156,22 @@ class LogModelTest(APITestCase):
         log = Log.objects.get(pk=1)
         self.assertNotEqual(
             log.log_text, "This is my current logging progress as non author")
+
+    def test_upload_file(self):
+
+        file = SimpleUploadedFile(
+            "file.txt", b"abc", content_type="text/plain")
+        payload = {"log": 1, "file": file}
+
+        upload_file = reverse("upload_file", kwargs={"log_id": "1"})
+        data = {"username": "test-user",
+                "email": "test@mail.com",
+                "password": "test-password",
+                }
+
+        self.client.post(self.login, data)
+
+        response = self.client.post(
+            upload_file, data=payload, format="multipart")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
