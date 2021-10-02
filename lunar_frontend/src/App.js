@@ -10,19 +10,34 @@ import Log from './views/Log';
 import User from './views/User';
 
 class App extends React.Component {
-    render() {
-        return (
-            <BrowserRouter>
-                <Switch>
-                    <PublicRoute restricted={false} component={Home} path={Url.ROOT} exact />
-                    <PublicRoute restricted={true} component={Login} path={Url.LOGIN} exact />
-                    <PublicRoute restricted={true} component={Register} path={Url.REGISTER} exact />
-                    <PrivateRoute component={Log} path={Url.MY_LOG} exact />
-                    <PrivateRoute component={User} path={Url.MY_USER} exact />
-                </Switch>
-            </BrowserRouter>
-        );
-    }
+  render() {
+    return (
+      <BrowserRouter>
+        <Switch>
+          <PublicRoute
+            restricted={false}
+            component={Home}
+            path={Url.ROOT}
+            exact
+          />
+          <PublicRoute
+            restricted={true}
+            component={Login}
+            path={Url.LOGIN}
+            exact
+          />
+          <PublicRoute
+            restricted={true}
+            component={Register}
+            path={Url.REGISTER}
+            exact
+          />
+          <PublicRoute component={Log} path={Url.MY_LOG} exact />
+          <PrivateRoute component={User} path={Url.MY_USER} exact />
+        </Switch>
+      </BrowserRouter>
+    );
+  }
 }
 
 export default App;
