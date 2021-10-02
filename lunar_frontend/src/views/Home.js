@@ -8,8 +8,22 @@ import {
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
 import LogGrid from '../components/Shared/LogGrid';
+import * as LogService from '../services/api.logs';
 
 class Home extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            activeLogs: []
+        };
+    }
+
+    componentDidMount() {
+        LogService.getActiveLogs().then(logs => {
+            this.setState({ activeLogs: logs });
+        });
+    }
+    
     render() {
         return (
             <Box minHeight="100vh" display="flex" flexDir="column">
@@ -23,7 +37,7 @@ class Home extends React.Component {
                             All currently active logs
                         </Text>
                     </Box>
-                    <LogGrid />
+                    <LogGrid logList={this.state.activeLogs}/>
                 </Container>
                 <Footer/>
             </Box>
