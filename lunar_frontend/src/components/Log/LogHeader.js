@@ -1,26 +1,28 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
     Box,
     Button,
-    Container
+    Container,
+    Text
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import Menu from '../Shared/Menu';
 import * as Url from '../../utils/util.url';
 
-class Header extends React.Component {
+class LogHeader extends React.Component {
 
     render() {
         return (
-            <Box position={this.props.position ? this.props.position : "fixed"} w="100%" zIndex={1} backgroundColor="brand.primary">
+            <Box position="relative" w="100%" zIndex={1} backgroundColor="brand.primary">
                 <Container
-                    maxW="150ch"
+                    maxW="200ch"
                     py={3}
                     display="flex"
                     justifyContent="space-between"
                     alignItems="center">
                     <Button variant="ghost" fontSize="xl" as={Link} to={Url.ROOT}>
-                        LunarLog
+                        LunarLog&nbsp;#{this.props.id}
                     </Button>
                     <Menu />
                 </Container>
@@ -29,4 +31,12 @@ class Header extends React.Component {
     }
 }
 
-export default Header;
+LogHeader.propTypes = {
+    id: PropTypes.string
+}
+
+LogHeader.defaultProps = {
+    id: "id"
+}
+
+export default LogHeader;
