@@ -24,4 +24,4 @@ class File(models.Model):
     file = models.FileField(upload_to=logfiles_dir_path)
 
     def __str__(self):
-        return os.path.basename(self.file.name)
+        return os.path.basename(self.file.path)

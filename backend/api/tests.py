@@ -173,5 +173,5 @@ class LogModelTest(APITestCase):
 
         response = self.client.post(
             upload_file, data=payload, format="multipart")
-
+        print(LogSerializer(Log.objects.get(pk=1)).data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

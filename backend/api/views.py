@@ -7,6 +7,7 @@ from .serializers import LogSerializer, FileSerializer
 from .models import Log, File
 from rest_framework.parsers import FormParser, MultiPartParser, FileUploadParser
 from rest_framework.viewsets import ModelViewSet
+import json
 
 # Create your views here.
 
@@ -81,7 +82,9 @@ class UploadFileView(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
 
-        serializer = FileSerializer(data=request.data)
+        data = request.data
+        data["file"] = request.FILES.get("file")
+        serializer = FileSerializer(data=data)
         if serializer.is_valid():
             file = serializer.save()
             if file:

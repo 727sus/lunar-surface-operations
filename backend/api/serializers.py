@@ -6,7 +6,7 @@ from .models import File, Log
 
 class LogSerializer(serializers.ModelSerializer):
     author = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    files = serializers.StringRelatedField()
+    files = serializers.StringRelatedField(many=True, required=False)
 
     class Meta:
         model = Log
