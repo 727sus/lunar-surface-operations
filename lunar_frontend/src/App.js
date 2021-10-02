@@ -1,18 +1,28 @@
 import React from 'react';
-import {
-  ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  theme,
-} from '@chakra-ui/react';
-import { ColorModeSwitcher } from './ColorModeSwitcher';
+import { BrowserRouter, Switch } from 'react-router-dom';
+import PrivateRoute from './routes/PrivateRoute';
+import PublicRoute from './routes/PublicRoute';
+import * as Url from './utils/util.url';
+import Home from './views/Home';
+import Login from './views/Login';
+import Register from './views/Register';
+import Log from './views/Log';
+import User from './views/User';
 
-function App() {
-  return <ChakraProvider theme={theme}></ChakraProvider>;
+class App extends React.Component {
+    render() {
+        return (
+            <BrowserRouter>
+                <Switch>
+                    <PublicRoute restricted={false} component={Home} path={Url.ROOT} exact />
+                    <PublicRoute restricted={true} component={Login} path={Url.LOGIN} exact />
+                    <PublicRoute restricted={true} component={Register} path={Url.REGISTER} exact />
+                    <PrivateRoute component={Log} path={Url.MY_LOG} exact />
+                    <PrivateRoute component={User} path={Url.MY_USER} exact />
+                </Switch>
+            </BrowserRouter>
+        );
+    }
 }
 
 export default App;
