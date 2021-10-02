@@ -1,17 +1,19 @@
 import React from 'react';
-import { Box } from '@chakra-ui/react';
+import { Box, Center } from '@chakra-ui/react';
+import LogInput from '../components/Log/LogInput';
+import LogDisplay from '../components/Log/LogDisplay';
 
 class Log extends React.Component {
-    render() {
-        return (
-            <div>
-                <h1>1337dasikdfsa</h1>
-                <Box>
-                    dasfd
-                </Box>
-            </div>
-        );
-    }
+  render() {
+    return (
+      <Center>
+        <Box w="80%" pos="bottom">
+          <LogDisplay />
+          <LogInput />
+        </Box>
+      </Center>
+    );
+  }
 }
 
 export default Log;
