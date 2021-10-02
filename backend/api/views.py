@@ -1,9 +1,11 @@
+from os import stat
 from rest_framework import permissions, serializers
 from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import LogSerializer
 from .models import Log
+from rest_framework.parsers import DataAndFiles, FileUploadParser
 
 # Create your views here.
 
@@ -43,3 +45,35 @@ class LogView(RetrieveUpdateDestroyAPIView):
         serializer = LogSerializer(log, many=False)
 
         return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    def patch(self, request, *args, **kwargs):
+
+        try:
+            log = Log.objects.get(pk=kwargs["log_id"])
+        except Log.DoesNotExist:
+            return Response(
+                data="Log does not exist",
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        if request.user != log.author:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        serializer = LogSerializer(
+            log,
+            data=request.data,
+            context={"request": request},
+            partial=True
+        )
+
+        if serializer.is_valid():
+            log = serializer.save()
+            if log:
+                json = serializer.data
+                return Response(json, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UploadFileView(CreateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    parser_classes = (FileUploadParser,)

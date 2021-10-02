@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
 from .models import Log
@@ -86,3 +86,69 @@ class LogModelTest(APITestCase):
         response = self.client.get(view_log)
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_update_log_with_auth(self):
+
+        update_log = reverse("log_view", kwargs={"log_id": "1"})
+        data = {"username": "test-user",
+                "email": "test@mail.com",
+                "password": "test-password",
+                }
+
+        self.client.post(self.login, data)
+
+        data = {"log_text": "This is my current logging progress",
+                "other_fields": {"Flight seat": 59, "Duration of current Mission": 360}
+                }
+
+        response = self.client.patch(update_log, data, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["log_text"],
+                         "This is my current logging progress")
+        self.assertDictEqual(response.data["other_fields"], {
+                             "Flight seat": 59, "Duration of current Mission": 360})
+
+    def test_update_log_without_auth(self):
+
+        update_log = reverse("log_view", kwargs={"log_id": "1"})
+
+        data = {"log_text": "This is my current logging progress as non auth",
+                "other_fields": {"Flight days": 51, "Flight hours": 729}
+                }
+
+        response = self.client.patch(update_log, data, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        log = Log.objects.get(pk=1)
+        self.assertNotEqual(
+            log.log_text, "This is my current logging progress as non auth")
+
+    def test_update_log_with_different_auth(self):
+        User.objects.create_user(
+            username="test-user-2",
+            email="test-2@mail.com",
+            password="test-password-2",
+        )
+
+        data = {"username": "test-user-2",
+                "email": "test-2@mail.com",
+                "password": "test-password-2",
+                }
+
+        self.client.post(self.login, data=data)
+
+        update_log = reverse("log_view", kwargs={"log_id": "1"})
+
+        data = {"log_text": "This is my current logging progress as non author",
+                "other_fields":
+                    {"Mission objective":
+                     "The current mission is to pick up rocks from the Moon"}
+                }
+
+        response = self.client.patch(update_log, data, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        log = Log.objects.get(pk=1)
+        self.assertNotEqual(
+            log.log_text, "This is my current logging progress as non author")
