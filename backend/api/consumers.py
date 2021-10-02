@@ -40,18 +40,18 @@ class LogConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+        message = text_data_json['log_contents']
 
         # Only when the current consumer is the author then we broadcast
         if self.scope['author']:
             await self.channel_layer.group_send(
                 self.viewers_group_name,
                 {
-                    'type': 'chat_message',
-                    'message': message
+                    'type': 'relay_log_contents',
+                    'log_contents': message
                 })
 
-    async def chat_message(self, event):
+    async def relay_log_contents(self, event):
         await self.send(text_data=json.dumps({
-            'message': event['message']
+            'log_contents': event['log_contents']
         }))
