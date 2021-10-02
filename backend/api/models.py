@@ -3,6 +3,18 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 
+class WebsocketConnectionGroup(models.Model):
+    document_id = models.IntegerField("Document ID")
+    name = models.CharField("Name", max_length=255)
+
+
+class WebsocketConnection(models.Model):
+    username = models.CharField("Username", max_length=255)
+    channel_group = models.ForeignKey(
+        WebsocketConnectionGroup, related_name="groups", on_delete=models.CASCADE)
+    last_updated = models.DateTimeField(auto_now_add=True)
+
+
 class Log(models.Model):
     title = models.CharField("Title", max_length=255)
     log_text = models.TextField("Log Text", default="")
