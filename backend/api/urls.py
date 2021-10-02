@@ -18,5 +18,5 @@ from .views import CreateLogView, LogView
 
 urlpatterns = [
     path('create', CreateLogView.as_view(), name="create_log"),
-    path('<str:log_id>', LogView.as_view(), name="log_view")
+    path('logs/<str:log_id>', LogView.as_view(), name="log_view")
 ]
