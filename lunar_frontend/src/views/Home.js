@@ -2,13 +2,12 @@ import React from 'react';
 import { 
     Box,
     Heading,
-    SimpleGrid,
     Container,
     Text
 } from '@chakra-ui/react';
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
-import LogCard from '../components/Home/LogCard';
+import LogGrid from '../components/Shared/LogGrid';
 
 class Home extends React.Component {
     render() {
@@ -24,38 +23,7 @@ class Home extends React.Component {
                             All currently active logs
                         </Text>
                     </Box>
-                    <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={5} mt={6}>
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                        <LogCard />
-                    </SimpleGrid>
+                    <LogGrid />
                 </Container>
                 <Footer/>
             </Box>
