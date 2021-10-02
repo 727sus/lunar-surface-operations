@@ -19,11 +19,11 @@ from django.urls import path, include
 urlpatterns = [
     # May remove this in the near future
     path('admin/', admin.site.urls),
-
     # The following endpoints can be renamed from not 'dj-rest-auth'
     # For more information about these endpoints see:
     # https://dj-rest-auth.readthedocs.io/en/latest/api_endpoints.html
     # (Only Social Media Authentication is not enabled)
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
+    path('api/', include("api.urls"))
 ]
