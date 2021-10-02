@@ -9,7 +9,7 @@ function djb2(str){
 
 // Check if user is logged in
 function isAuthenticated() {
-    return true;
+    return false;
 }
 
 // Assign each username/id a color
