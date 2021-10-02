@@ -25,3 +25,15 @@ class File(models.Model):
 
     def __str__(self):
         return os.path.basename(self.file.path)
+
+
+class WebSocketConnectionGroup(models.Model):
+    document_id = models.IntegerField()
+    name = models.CharField(max_length=255)
+
+
+class WebSocketConnection(models.Model):
+    username = models.CharField(max_length=255)
+    channel_group = models.ForeignKey(
+        WebSocketConnectionGroup, on_delete=models.CASCADE)
+    last_updated = models.DateTimeField()
