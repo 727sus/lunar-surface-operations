@@ -5,13 +5,14 @@ import {
     Container
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
-import HeaderMenu from './HeaderMenu';
+import Menu from '../Shared/Menu';
 import * as Url from '../../utils/util.url';
 
 class Header extends React.Component {
+
     render() {
         return (
-            <Box position="fixed" w="100%" zIndex={1} backgroundColor="brand.primary">
+            <Box position={this.props.position ? this.props.position : "fixed"} w="100%" zIndex={1} backgroundColor="brand.primary">
                 <Container
                     maxW="150ch"
                     py={3}
@@ -21,7 +22,7 @@ class Header extends React.Component {
                     <Button variant="ghost" fontSize="xl" as={Link} to={Url.ROOT}>
                         LunarLog
                     </Button>
-                    <HeaderMenu />
+                    <Menu />
                 </Container>
             </Box>
         );

@@ -8,8 +8,22 @@ import {
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
 import LogGrid from '../components/Shared/LogGrid';
+import * as UserService from '../services/api.users';
 
 class User extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            myLogs: []
+        };
+    }
+
+    componentDidMount() {
+        UserService.getMyLogs().then(logs => {
+            this.setState({ myLogs: logs });
+        });
+    }
+
     render() {
         return (
             <Box minHeight="100vh" display="flex" flexDir="column">
@@ -23,7 +37,7 @@ class User extends React.Component {
                             All my archived logs
                         </Text>
                     </Box>
-                    <LogGrid />
+                    <LogGrid logList={this.state.myLogs} />
                 </Container>
                 <Footer/>
             </Box>

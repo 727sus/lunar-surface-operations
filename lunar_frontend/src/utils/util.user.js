@@ -26,8 +26,18 @@ function getUsername() {
     return "Xiwen Teoh";
 }
 
+// Return current logged in user's authorization header
+function getUserAuthHeader() {
+    if(isAuthenticated()) {
+        return { Authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" };
+    } else {
+        return {};
+    }
+}
+
 export {
     isAuthenticated,
     getUsername,
-    getUserColor
+    getUserColor,
+    getUserAuthHeader
 }
