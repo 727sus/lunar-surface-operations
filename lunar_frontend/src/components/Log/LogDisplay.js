@@ -1,44 +1,146 @@
 import React, { useState } from 'react';
-import { Flex, Box, Center, Text } from '@chakra-ui/react';
+import { Flex, Box, Center, Spacer } from '@chakra-ui/react';
 
 const LogDisplay = () => {
   return (
-    <Center>
+    <Box>
       <Flex
         direction="column"
         grow="1"
         color="brand.accent2"
         bg="brand.secondary"
+        align="end"
+        h="88vh"
+        overflow="auto"
       >
-        <Flex grow="1" overflow="auto">
+        <Flex grow="1">
           <Flex direction="column" align="start" justify="end" px="3">
-            <Flex my="1" direction="column">
-              <Box rounded="md" py="1" py="2">
-                Hello
+            <Flex my="1" direction="column" alignSelf="end" alignItems="end">
+              <Box rounded="sm" bg="brand.accent1" color="black">
+                Requesting for help
               </Box>
-              <Box rounded="md" py="1" py="2">
-                <Text align-self="end">Wassup</Text>
+              <Box textAlign={['right']}>You</Box>
+            </Flex>
+
+            <Flex my="1" direction="column" alignSelf="end" alignItems="end">
+              <Box rounded="sm" bg="brand.accent2" color="black">
+                God damn it
               </Box>
-              <Box rounded="md" py="1" py="2">
-                <Text align-self="end">Wassup</Text>
+              <Box textAlign={['right']}>Control Center</Box>
+            </Flex>
+
+            <Flex my="1" direction="column" alignSelf="end" alignItems="end">
+              <Box rounded="sm" bg="brand.accent1" color="black">
+                Nope
               </Box>
-              <Box rounded="md" py="1" py="2">
-                <Text align-self="end">Wassup</Text>
+              <Box textAlign={['right']}>You</Box>
+            </Flex>
+            <Flex my="1" direction="column" alignSelf="end" alignItems="end">
+              <Box rounded="sm" bg="brand.accent1" color="black">
+                Nope
               </Box>
-              <Box rounded="md" py="1" py="2">
-                <Text align-self="end">Wassup</Text>
+              <Box textAlign={['right']}>You</Box>
+            </Flex>
+            <Flex my="1" direction="column" alignSelf="end" alignItems="end">
+              <Box rounded="sm" bg="brand.accent1" color="black">
+                Nope
               </Box>
-              <Box rounded="md" py="1" py="2">
-                <Text align-self="end">Wassup</Text>
+              <Box textAlign={['right']}>You</Box>
+            </Flex>
+            <Flex my="1" direction="column" alignSelf="end" alignItems="end">
+              <Box rounded="sm" bg="brand.accent1" color="black">
+                Nope
               </Box>
-              <Box rounded="md" py="1" py="2">
-                <Text align-self="end">Wassup</Text>
+              <Box textAlign={['right']}>You</Box>
+            </Flex>
+            <Flex my="1" direction="column" alignSelf="end" alignItems="end">
+              <Box rounded="sm" bg="brand.accent1" color="black">
+                Nope
               </Box>
+              <Box textAlign={['right']}>You</Box>
+            </Flex>
+            <Flex my="1" direction="column" alignSelf="end" alignItems="end">
+              <Box rounded="sm" bg="brand.accent1" color="black">
+                Nope
+              </Box>
+              <Box textAlign={['right']}>You</Box>
+            </Flex>
+            <Flex my="1" direction="column" alignSelf="end" alignItems="end">
+              <Box rounded="sm" bg="brand.accent1" color="black">
+                Nope
+              </Box>
+              <Box textAlign={['right']}>You</Box>
+            </Flex>
+            <Flex my="1" direction="column" alignSelf="end" alignItems="end">
+              <Box rounded="sm" bg="brand.accent1" color="black">
+                Nope
+              </Box>
+              <Box textAlign={['right']}>You</Box>
+            </Flex>
+            <Flex my="1" direction="column" alignSelf="end" alignItems="end">
+              <Box rounded="sm" bg="brand.accent1" color="black">
+                Nope
+              </Box>
+              <Box textAlign={['right']}>You</Box>
+            </Flex>
+            <Flex my="1" direction="column" alignSelf="end" alignItems="end">
+              <Box rounded="sm" bg="brand.accent1" color="black">
+                Nope
+              </Box>
+              <Box textAlign={['right']}>You</Box>
+            </Flex>
+            <Flex my="1" direction="column" alignSelf="end" alignItems="end">
+              <Box rounded="sm" bg="brand.accent1" color="black">
+                Nope
+              </Box>
+              <Box textAlign={['right']}>You</Box>
+            </Flex>
+            <Flex my="1" direction="column" alignSelf="end" alignItems="end">
+              <Box rounded="sm" bg="brand.accent1" color="black">
+                Nope
+              </Box>
+              <Box textAlign={['right']}>You</Box>
+            </Flex>
+            <Flex my="1" direction="column" alignSelf="end" alignItems="end">
+              <Box rounded="sm" bg="brand.accent1" color="black">
+                Nope
+              </Box>
+              <Box textAlign={['right']}>You</Box>
+            </Flex>
+            <Flex my="1" direction="column" alignSelf="end" alignItems="end">
+              <Box rounded="sm" bg="brand.accent1" color="black">
+                Nope
+              </Box>
+              <Box textAlign={['right']}>You</Box>
+            </Flex>
+            <Flex my="1" direction="column" alignSelf="end" alignItems="end">
+              <Box rounded="sm" bg="brand.accent1" color="black">
+                Nope
+              </Box>
+              <Box textAlign={['right']}>You</Box>
+            </Flex>
+            <Flex my="1" direction="column" alignSelf="end" alignItems="end">
+              <Box rounded="sm" bg="brand.accent1" color="black">
+                Nope
+              </Box>
+              <Box textAlign={['right']}>You</Box>
+            </Flex>
+            <Flex my="1" direction="column" alignSelf="end" alignItems="end">
+              <Box rounded="sm" bg="brand.accent1" color="black">
+                Nope
+              </Box>
+              <Box textAlign={['right']}>You</Box>
+            </Flex>
+            <Flex my="1" direction="column" alignSelf="end" alignItems="end">
+              <Box rounded="sm" bg="brand.accent1" color="black">
+                Nope
+              </Box>
+              <Box textAlign={['right']}>You</Box>
             </Flex>
           </Flex>
         </Flex>
       </Flex>
-    </Center>
+    </Box>
   );
 };
 
