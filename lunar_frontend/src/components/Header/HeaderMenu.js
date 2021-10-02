@@ -18,7 +18,7 @@ class HeaderMenu extends React.Component {
         return (
             <Menu>
                 <MenuButton
-                    colorScheme={'red'}
+                    colorScheme="red"
                     as={Button}
                     fontSize="md"
                     mt={1}
@@ -36,7 +36,7 @@ function LoggedInMenu() {
     return (
         <MenuList>
             <MenuGroup title={User.getUsername()} fontSize="md" isTruncated>
-                <MenuItem pl={4}>My Logs</MenuItem>
+                <MenuItem pl={4} as={Link} to={Url.MY_USER}>My Logs</MenuItem>
                 <MenuItem pl={4}>Logout</MenuItem>
             </MenuGroup>
             <MenuDivider />
@@ -44,7 +44,7 @@ function LoggedInMenu() {
                 <MenuItem mt={2}
                     as={Button}
                     variant="solid"
-                    bgColor={'red.700'}>
+                    bgColor="red.700">
                     New Log
                 </MenuItem>
             </Box>

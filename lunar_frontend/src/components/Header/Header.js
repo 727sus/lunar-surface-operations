@@ -4,19 +4,21 @@ import {
     Button,
     Container
 } from '@chakra-ui/react';
-import HeaderMenu from './HeaderMenu'
+import { Link } from 'react-router-dom';
+import HeaderMenu from './HeaderMenu';
+import * as Url from '../../utils/util.url';
 
 class Header extends React.Component {
     render() {
         return (
-            <Box position="fixed" w="100%" zIndex={1} backgroundColor={'gray.800'}>
+            <Box position="fixed" w="100%" zIndex={1} backgroundColor="brand.primary">
                 <Container
                     maxW="150ch"
                     py={3}
                     display="flex"
                     justifyContent="space-between"
                     alignItems="center">
-                    <Button variant="ghost" fontSize="xl" onClick={scrollToTop}>
+                    <Button variant="ghost" fontSize="xl" as={Link} to={Url.ROOT}>
                         LunarLog
                     </Button>
                     <HeaderMenu />
@@ -24,10 +26,6 @@ class Header extends React.Component {
             </Box>
         );
     }
-}
-
-function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 export default Header;

@@ -6,6 +6,7 @@ import {
 import RegisterForm from '../components/Register/RegisterForm';
 import RegisterFormHeader from '../components/Register/RegisterFormHeader';
 import Header from '../components/Header/Header';
+import Footer from '../components/Footer/Footer';
 
 class Register extends React.Component {
     render() {
@@ -24,6 +25,7 @@ class Register extends React.Component {
                         <RegisterForm />
                     </Box>
                 </Container>
+                <Footer />
             </Box>
         );
     }

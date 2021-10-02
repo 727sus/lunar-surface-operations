@@ -6,6 +6,7 @@ import {
 import LoginForm from '../components/Login/LoginForm';
 import LoginFormHeader from '../components/Login/LoginFormHeader';
 import Header from '../components/Header/Header';
+import Footer from '../components/Footer/Footer';
 
 class Login extends React.Component {
     render() {
@@ -24,6 +25,7 @@ class Login extends React.Component {
                         <LoginForm />
                     </Box>
                 </Container>
+                <Footer />
             </Box>
         );
     }
