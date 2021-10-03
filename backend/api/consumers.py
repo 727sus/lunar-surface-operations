@@ -3,9 +3,10 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from rest_framework.status import HTTP_401_UNAUTHORIZED
 from rest_framework_simplejwt.serializers import TokenVerifySerializer
 from django.contrib.auth.models import User
-
+from channels.db import database_sync_to_async
 
 class LogConsumer(AsyncWebsocketConsumer):
+    
     async def connect(self):
         """
         Handles connection logic. This implementation is too inefficient and should be
@@ -39,7 +40,7 @@ class LogConsumer(AsyncWebsocketConsumer):
 
         if 'tracked_usernames' not in self.scope['session']:
             self.scope['session']['tracked_usernames'] = {}
-            self.scope['session'].save()
+            self.save_session()
 
         # Add ourselves to the group
         await self.channel_layer.group_add(
@@ -94,3 +95,7 @@ class LogConsumer(AsyncWebsocketConsumer):
             return
 
         await self.send(text_data=json.dumps({'message': event['log_contents']}))
+
+    @database_sync_to_async
+    def save_session(self):
+        self.scope['session'].save()
