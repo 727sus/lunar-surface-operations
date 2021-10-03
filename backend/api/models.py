@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils.text import slugify
+#from django.utils.text import slugify
 import os
 # Create your models here.
 
@@ -17,7 +17,7 @@ class Log(models.Model):
 class File(models.Model):
 
     def logfiles_dir_path(instance, filename):
-        return f"{instance.log.pk}/{slugify(filename)}"
+        return f"{instance.log.pk}/{filename}"
 
     log = models.ForeignKey(Log, related_name="files",
                             on_delete=models.CASCADE)
@@ -25,3 +25,8 @@ class File(models.Model):
 
     def __str__(self):
         return os.path.basename(self.file.path)
+
+    def delete(self, *args, **kwargs):
+        if os.path.isfile(self.file.path):
+            os.remove(self.file.path)
+        return super().delete(*args, **kwargs)

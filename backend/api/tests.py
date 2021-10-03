@@ -342,3 +342,38 @@ class LogModelTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         log = LogSerializer(Log.objects.get(pk=1)).data
         self.assertEqual(len(log['files']), 2)
+
+    @override_settings(MEDIA_ROOT=gettempdir())
+    def test_delete_file(self):
+        file = SimpleUploadedFile(
+            "file.txt", b"abc", content_type="text/plain")
+        payload = {"log": 1, "file": file}
+
+        upload_file = reverse("upload_file", kwargs={"log_id": "1"})
+        data = {"username": "test-user",
+                "email": "test@mail.com",
+                "password": "test-password",
+                }
+
+        self.client.post(self.login, data)
+
+        self.client.post(upload_file, data=payload, format="multipart")
+
+        log = LogSerializer(Log.objects.get(pk=1)).data
+
+        log_files = log['files']
+
+        delete_file = reverse("destroy_file", kwargs={
+                              "log_id": "1", "filename": log_files[0]})
+
+        response = self.client.delete(delete_file)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        log = LogSerializer(Log.objects.get(pk=1)).data
+
+        new_log_files = log['files']
+
+        print(log_files)
+
+        self.assertEqual(len(log_files)-1, len(new_log_files))
