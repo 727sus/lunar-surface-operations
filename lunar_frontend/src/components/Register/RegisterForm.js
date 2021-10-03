@@ -3,44 +3,117 @@ import {
     Box,
     FormControl,
     FormLabel,
+    FormErrorMessage,
     Input,
     Stack,
     Button,
     Text
 } from '@chakra-ui/react';
+import {
+    useForm
+} from "react-hook-form";
 import { Link } from 'react-router-dom';
 import * as Url from '../../utils/util.url';
+import * as AuthService from '../../services/api.auth';
 
-class RegisterForm extends React.Component {
-    render() {
-        return (
-            <Box w="100%">
+function RegisterForm() {
+
+    const {
+        handleSubmit,
+        register,
+        setError,
+        formState: { errors, isSubmitting }
+    } = useForm();
+
+    function onSubmit(values) {
+
+        if(values.password != values.confirmPassword) {
+            setError("password", { type: "client", message: "Passwords don't match"});
+            setError("confirmPassword", { type: "client", message: "Passwords don't match"});
+            return;
+        }
+        
+        return new Promise(resolve => {
+            AuthService.postRegistration(values.username, values.email, values.password, values.confirmPassword)
+            .then(user => {
+                window.location.replace(Url.ROOT);
+            })
+            .catch(errors => {
+                if(errors.username) { setError("username", { type: "server", message: errors.username }); }
+                if(errors.email) { setError("email", { type: "server", message: errors.email }); }
+                if(errors.password1) { setError("password", { type: "server", message: errors.password1 }); }
+                if(errors.password2) { setError("confirmPassword", { type: "server", message: errors.password2 }); }
+            })
+
+            resolve();
+        });
+    }
+
+    return (
+        <Box w="100%">
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <Stack spacing={4}>
-                <FormControl id="username">
+                <FormControl id="username" isInvalid={errors.username}>
                     <FormLabel>Username</FormLabel>
-                    <Input type="username" focusBorderColor="brand.accent2" variant="filled" />
+                    <Input
+                        name="username"
+                        type="username"
+                        {...register("username", {
+                            required: "This is required"
+                        })}
+                        focusBorderColor="brand.accent2" 
+                        variant="filled"
+                    />
+                    <FormErrorMessage>{errors.username && errors.username.message}</FormErrorMessage>
                 </FormControl>
-                <FormControl id="email">
+                <FormControl id="email" isInvalid={errors.email}>
                     <FormLabel>Email</FormLabel>
-                    <Input type="email" focusBorderColor="brand.accent2" variant="filled" />
+                    <Input
+                        name="email"
+                        type="email"
+                        {...register("email", {
+                            required: "This is required"
+                        })}
+                        focusBorderColor="brand.accent2" 
+                        variant="filled"
+                    />
+                    <FormErrorMessage>{errors.email && errors.email.message}</FormErrorMessage>
                 </FormControl>
-                <FormControl id="password">
+                <FormControl id="password" isInvalid={errors.password}>
                     <FormLabel>Password</FormLabel>
-                    <Input type="password" focusBorderColor="brand.accent2" variant="filled" />
+                    <Input
+                        name="password"
+                        type="password"
+                        {...register("password", {
+                            required: "This is required"
+                        })}
+                        focusBorderColor="brand.accent2" 
+                        variant="filled"
+                    />
+                    <FormErrorMessage>{errors.password && errors.password.message}</FormErrorMessage>
                 </FormControl>
-                <FormControl id="confirmPassword">
+                <FormControl id="confirmPassword" isInvalid={errors.confirmPassword}>
                     <FormLabel>Confirm Password</FormLabel>
-                    <Input type="confirmPassword" focusBorderColor="brand.accent2" variant="filled" />
+                    <Input
+                        name="confirmPassword"
+                        type="password"
+                        {...register("confirmPassword", {
+                            required: "This is required"
+                        })}
+                        focusBorderColor="brand.accent2" 
+                        variant="filled"
+                    />
+                    <FormErrorMessage>{errors.confirmPassword && errors.confirmPassword.message}</FormErrorMessage>
                 </FormControl>
                 <Box />
-                <Button fontWeight="bold" color="brand.primary" bg="brand.accent2">Register</Button>
+                <Button isLoading={isSubmitting} type="submit" fontWeight="bold" color="brand.primary" bg="brand.accent2">Register</Button>
                 </Stack>
                 <Text fontSize="lg" color="brand.tertiary" mt={4}>
                     Already have an account? <Text as={Link} to={Url.LOGIN} color="brand.highlight" fontWeight="semibold">Sign In</Text>
                 </Text>
-            </Box>
-        );
-    }
+            </form>
+        </Box>
+    );
 }
 
 export default RegisterForm;

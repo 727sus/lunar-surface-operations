@@ -7,8 +7,16 @@ import {
     MenuList,
     MenuItem,
     MenuDivider,
-    Box
+    Box,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalCloseButton,
+    ModalBody,
+    useDisclosure
 } from '@chakra-ui/react';
+import LogCreateForm from './LogCreateForm';
 import { Link } from 'react-router-dom';
 import * as User from '../../utils/util.user';
 import * as Url from '../../utils/util.url';
@@ -33,6 +41,9 @@ class HeaderMenu extends React.Component {
 }
 
 function LoggedInMenu() {
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    
     return (
         <MenuList>
             <MenuGroup title={User.getUsername()} fontSize="md" isTruncated>
@@ -42,12 +53,25 @@ function LoggedInMenu() {
             <MenuDivider />
             <Box m={4}>
                 <MenuItem mt={2}
+                    onClick={onOpen}
                     as={Button}
                     variant="solid"
                     bgColor="red.700">
                     New Log
                 </MenuItem>
             </Box>
+
+            <Modal isOpen={isOpen} onClose={onClose} isCentered>
+                <ModalOverlay />
+                <ModalContent pb={6}>
+                <ModalHeader>Create New Log</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                    <LogCreateForm />
+                </ModalBody>
+                </ModalContent>
+            </Modal>
+
         </MenuList>
     );
 }
