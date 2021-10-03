@@ -161,7 +161,7 @@ class UploadFileView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class DestroyFileView(DestroyAPIView):
+class DestroyFileView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def delete(self, request, *args, **kwargs):
