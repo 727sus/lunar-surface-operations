@@ -44,7 +44,7 @@ class LogConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
-        pass
+        super().disconnect(close_code)
 
     async def receive(self, text_data):
         """
