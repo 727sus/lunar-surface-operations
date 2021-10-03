@@ -48,7 +48,10 @@ class LogConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
-        super().disconnect(close_code)
+        await self.channel_layer.group_discard(
+            self.document_group,
+            self.channel_name
+        )
 
     async def receive(self, text_data):
         """
@@ -73,11 +76,11 @@ class LogConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'relay_log_contents',
                 'log_contents': text_data_json['message'],
-                'username_list': self.tracked_usernames
+                'sender': self.user.username
             })
 
     async def relay_log_contents(self, event):
-        if self.user.username in event['username_list'] and event['username_list'][self.user.username] == False:
+        if event['sender'] in self.tracked_usernames and self.tracked_usernames[event['sender']] == False:
             return
 
         await self.send(text_data=json.dumps({'message': event['log_contents']}))
