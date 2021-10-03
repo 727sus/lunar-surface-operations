@@ -7,6 +7,7 @@ from .models import Log, File
 from rest_framework import status
 from django.urls import reverse
 from django.forms.models import model_to_dict
+from tempfile import mkstemp
 
 
 # Create your tests here.
@@ -157,6 +158,15 @@ class LogModelTest(APITestCase):
         self.assertNotEqual(
             log.log_text, "This is my current logging progress as non author")
 
+    def test_delete_log_with_auth(self):
+        return
+
+    def test_delete_log_without_auth(self):
+        return
+
+    def test_delete_log_with_different_auth(self):
+        return
+
     def test_upload_file(self):
 
         file = SimpleUploadedFile(
@@ -173,5 +183,4 @@ class LogModelTest(APITestCase):
 
         response = self.client.post(
             upload_file, data=payload, format="multipart")
-        print(LogSerializer(Log.objects.get(pk=1)).data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
