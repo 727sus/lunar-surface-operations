@@ -32,7 +32,11 @@ class LogConsumer(AsyncWebsocketConsumer):
         self.document_id = self.scope['url_route']['kwargs']['document_id']
         self.user: User = self.scope['user']
         self.document_group = f"document_{self.document_id}"
-        self.unsubscribed_usernames = []
+
+        # Untracked usernames are by default subscribed,
+        # boolean values within the dict indicates whether the current websocket is
+        # subscribed or unsubscribed to the other user
+        self.tracked_usernames = {}
 
         # Add ourselves to the group
         await self.channel_layer.group_add(
@@ -57,18 +61,10 @@ class LogConsumer(AsyncWebsocketConsumer):
 
         if 'type' in text_data_json:
             if text_data_json['type'] == 'subscribe':
-                try:
-                    # We don't care whether this suceeds or not
-                    self.unsubscribed_usernames.remove(
-                        text_data_json['username'])
-                except:
-                    pass
+                # We don't care whether this suceeds or not
+                self.tracked_usernames[text_data_json['username']] = True
             elif text_data_json['type'] == 'unsubscribe':
-                self.unsubscribed_usernames.append(text_data_json['username'])
-
-            await self.send(text_data=json.dumps({
-                'status': 200
-            }))
+                self.tracked_usernames[text_data_json['username']] = False
             return
 
         # If we reached here, then consumer prompted for 'send'
@@ -77,12 +73,11 @@ class LogConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'relay_log_contents',
                 'log_contents': text_data_json['message'],
-                'blacklist': self.unsubscribed_usernames
+                'username_list': self.tracked_usernames
             })
 
     async def relay_log_contents(self, event):
+        if self.user.username in event['username_list'] and event['username_list'][self.user.username] == False:
+            return
 
-        if self.user.username not in event['blacklist']:
-            await self.send(text_data=json.dumps({
-                'message': event['log_contents']
-            }))
+        await self.send(text_data=json.dumps({'message': event['log_contents']}))
