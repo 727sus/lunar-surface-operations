@@ -5,6 +5,7 @@ import {
   Input,
   Button,
   Flex,
+  Text,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -16,7 +17,17 @@ import {
 
 import { ArrowUpIcon, PlusSquareIcon } from '@chakra-ui/icons';
 
+import { useDropzone } from 'react-dropzone';
+
 const LogInput = () => {
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+
+  const files = acceptedFiles.map(file => (
+    <li key={file.path}>
+      {file.path}-{file.size} bytes
+    </li>
+  ));
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box w="100%" color="brand.secondary">
@@ -32,7 +43,19 @@ const LogInput = () => {
             <ModalCloseButton />
             <ModalBody>
               <Center>
-                <PlusSquareIcon m="200" w={12} h={12} />
+                <Flex direction="column">
+                  <section className="container">
+                    <div {...getRootProps({ className: 'dropzone' })}>
+                      <input {...getInputProps()} />
+                      <PlusSquareIcon m="200" w={12} h={12} />
+                      <Text padding="4">
+                        Drag 'n' drop some files here, or click to select files
+                      </Text>
+                      <Text padding="4">Files: </Text>
+                      <Text padding="4">{files}</Text>
+                    </div>
+                  </section>
+                </Flex>
               </Center>
             </ModalBody>
           </ModalContent>
