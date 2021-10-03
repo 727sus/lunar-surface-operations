@@ -5,8 +5,9 @@ from rest_framework_simplejwt.serializers import TokenVerifySerializer
 from django.contrib.auth.models import User
 from channels.db import database_sync_to_async
 
+
 class LogConsumer(AsyncWebsocketConsumer):
-    
+
     async def connect(self):
         """
         Handles connection logic. This implementation is too inefficient and should be
@@ -69,6 +70,9 @@ class LogConsumer(AsyncWebsocketConsumer):
         """
 
         text_data_json = json.loads(text_data)
+
+        print("receive(): ", sep="")
+        print(text_data_json)
 
         if 'type' in text_data_json:
             if text_data_json['type'] == 'subscribe':
