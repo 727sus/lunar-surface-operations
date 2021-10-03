@@ -167,4 +167,5 @@ MEDIA_ROOT = BASE_DIR.joinpath("media")
 MEDIA_URL = "/media/"
 
 
-STATIC_ROOT = '/statc/'
+STATIC_ROOT = BASE_DIR.joinpath("staticfiles")
+STATIC_URL = "/static/"
