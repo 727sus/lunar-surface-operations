@@ -14,7 +14,7 @@ invalid_user_error = {"error": "Invalid User"}
 invalid_log_error = {"error": "Log does not exist"}
 
 
-class CreateLogView(CreateAPIView):
+class CreateLogView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request, *args, **kwargs):
@@ -134,7 +134,7 @@ class LogView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UploadFileView(CreateAPIView):
+class UploadFileView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     parser_classes = [MultiPartParser, FormParser]
 
