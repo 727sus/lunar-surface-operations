@@ -1,7 +1,7 @@
 from os import stat
 from tempfile import TemporaryFile
 from rest_framework import permissions, serializers
-from rest_framework.generics import CreateAPIView, DestroyAPIView
+from rest_framework.generics import CreateAPIView, DestroyAPIView, ListAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -195,3 +195,9 @@ class DestroyFileView(DestroyAPIView):
         _file.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ListLogView(ListAPIView):
+    queryset = Log.objects.all()
+    serializer_class = LogSerializer
+    permission_classes = (permissions.IsAuthenticated,)
