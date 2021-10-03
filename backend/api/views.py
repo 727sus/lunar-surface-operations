@@ -1,6 +1,7 @@
 from os import stat
 from rest_framework import permissions, serializers
-from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import CreateAPIView
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import LogSerializer, FileSerializer
@@ -35,7 +36,7 @@ class CreateLogView(CreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class LogView(RetrieveUpdateDestroyAPIView):
+class LogView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
@@ -65,6 +66,9 @@ class LogView(RetrieveUpdateDestroyAPIView):
             return Response(data=invalid_user_error,
                             status=status.HTTP_401_UNAUTHORIZED)
 
+        if log.perm_save:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         serializer = LogSerializer(
             log,
             data=request.data,
@@ -91,9 +95,45 @@ class LogView(RetrieveUpdateDestroyAPIView):
         if request.user != log.author:
             return Response(data=invalid_user_error, status=status.HTTP_401_UNAUTHORIZED)
 
+        if log.perm_save:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         log.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def post(self, request, *args, **kwargs):
+
+        try:
+            log = Log.objects.get(pk=kwargs["log_id"])
+        except Log.DoesNotExist:
+            return Response(
+                data=invalid_log_error,
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        if request.user != log.author:
+            return Response(data=invalid_user_error,
+                            status=status.HTTP_401_UNAUTHORIZED)
+
+        if log.perm_save:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        request.data["perm_save"] = True
+
+        serializer = LogSerializer(
+            log,
+            data=request.data,
+            context={"request": request},
+            partial=True
+        )
+
+        if serializer.is_valid():
+            log = serializer.save()
+            if log:
+                json = serializer.data
+                return Response(json, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UploadFileView(CreateAPIView):
