@@ -17,7 +17,7 @@ class LogCard extends React.Component {
             <Box backgroundColor="brand.secondary" borderRadius={['sm', null, 'md']} overflow="hidden">
                 <Flex px={4} pt={2} align="center" justify="space-between" w="100%">
                     <Text fontSize={['md', null, 'xl']} fontWeight="semibold">
-                        #{this.props.id}
+                        #{this.props.id.toString()}
                     </Text>
                 </Flex>
 
@@ -45,6 +45,7 @@ class LogCard extends React.Component {
 
 LogCard.propTypes = {
     id: PropTypes.string,
+    id: PropTypes.number,
     author: PropTypes.string
 }
 
