@@ -10,8 +10,6 @@ from rest_framework.parsers import FormParser, MultiPartParser, FileUploadParser
 from rest_framework.viewsets import ModelViewSet
 import json
 
-# Create your views here.
-
 invalid_user_error = {"error": "Invalid User"}
 invalid_log_error = {"error": "Log does not exist"}
 

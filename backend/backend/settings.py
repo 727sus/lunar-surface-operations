@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'api',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -93,7 +94,7 @@ DATABASES = {
 
 
 # Password validation
-# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
+# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-valid   rs
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -151,5 +152,17 @@ REST_USE_JWT = True
 JWT_AUTH_COOKIE = 'access-token'
 JWT_AUTH_REFRESH_COOKIE = 'refresh-token'
 
+
+ASGI_APPLICATION = 'backend.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379)]
+        }
+    }
+}
+
 MEDIA_ROOT = BASE_DIR.joinpath("media")
 MEDIA_URL = "/media/"
+
