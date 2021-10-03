@@ -78,7 +78,7 @@ class LogConsumer(AsyncWebsocketConsumer):
                 self.scope['session']['tracked_usernames'][text_data_json['username']] = False
 
             # Save the session
-            self.scope['session'].save()
+            self.save_session()
             return
 
         # If we reached here, then consumer prompted for 'send'
