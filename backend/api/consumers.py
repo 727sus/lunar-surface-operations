@@ -71,28 +71,26 @@ class LogConsumer(AsyncWebsocketConsumer):
 
         text_data_json = json.loads(text_data)
 
-        print("receive(): ", sep="")
-        print(text_data_json)
-
         if 'type' in text_data_json:
             if text_data_json['type'] == 'subscribe':
                 # We don't care whether this suceeds or not
                 self.scope['session']['tracked_usernames'][text_data_json['username']] = True
+                # Save the session
+                self.save_session()
             elif text_data_json['type'] == 'unsubscribe':
                 self.scope['session']['tracked_usernames'][text_data_json['username']] = False
+                # Save the session
+                self.save_session()
 
-            # Save the session
-            self.save_session()
-            return
-
-        # If we reached here, then consumer prompted for 'send'
-        await self.channel_layer.group_send(
-            self.document_group,
-            {
-                'type': 'relay_log_contents',
-                'log_contents': text_data_json['message'],
-                'sender': self.user.username
-            })
+            elif text_data_json['type'] == 'send':
+                # If we reached here, then consumer prompted for 'send'
+                await self.channel_layer.group_send(
+                    self.document_group,
+                    {
+                        'type': 'relay_log_contents',
+                        'log_contents': text_data_json['message'],
+                        'sender': self.user.username
+                    })
 
     async def relay_log_contents(self, event):
         if event['sender'] in self.scope['session']['tracked_usernames'] and self.scope['session']['tracked_usernames'][event['sender']] == False:
