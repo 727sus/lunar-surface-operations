@@ -166,3 +166,5 @@ CHANNEL_LAYERS = {
 MEDIA_ROOT = BASE_DIR.joinpath("media")
 MEDIA_URL = "/media/"
 
+
+STATIC_ROOT = '/'
