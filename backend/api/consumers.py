@@ -12,20 +12,20 @@ class LogConsumer(AsyncWebsocketConsumer):
         revised in the future.
         """
 
-        # users might manually call this endpoint, reject unauthorized connections
-        if 'access-token' not in self.scope['cookies']:
-            await self.close(code=HTTP_401_UNAUTHORIZED)
-            return
+        # # users might manually call this endpoint, reject unauthorized connections
+        # if 'access-token' not in self.scope['cookies']:
+        #     await self.close(code=HTTP_401_UNAUTHORIZED)
+        #     return
 
-        # Use simplejwt's token verifier to check whether the given token has been expired or
-        # not
-        serializer = TokenVerifySerializer(
-            data=self.scope['cookies']['access-token'])
+        # # Use simplejwt's token verifier to check whether the given token has been expired or
+        # # not
+        # serializer = TokenVerifySerializer(
+        #     data=self.scope['cookies']['access-token'])
 
-        # A token is not valid if it has been expired
-        if not serializer.is_valid():
-            await self.close(code=HTTP_401_UNAUTHORIZED)
-            return
+        # # A token is not valid if it has been expired
+        # if not serializer.is_valid():
+        #     await self.close(code=HTTP_401_UNAUTHORIZED)
+        #     return
 
         ####### Actual Connection Code #######
 
@@ -51,10 +51,14 @@ class LogConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
-        await self.channel_layer.group_discard(
-            self.document_group,
-            self.channel_name
-        )
+
+        try:
+            await self.channel_layer.group_discard(
+                self.document_group,
+                self.channel_name
+            )
+        except:
+            pass
 
     async def receive(self, text_data):
         """
