@@ -184,3 +184,15 @@ class LogModelTest(APITestCase):
         response = self.client.post(
             upload_file, data=payload, format="multipart")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Try upload 2nd time to test file association
+        file = SimpleUploadedFile(
+            "file_2.txt", b"abc", content_type="text/plain")
+        payload = {"log": 1, "file": file}
+
+        response = self.client.post(
+            upload_file, data=payload, format="multipart")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        log = LogSerializer(Log.objects.get(pk=1)).data
+        self.assertEqual(len(log['files']), 2)
