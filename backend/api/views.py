@@ -11,13 +11,16 @@ import json
 
 # Create your views here.
 
+invalid_user_error = {"error": "Invalid User"}
+invalid_log_error = {"error": "Log does not exist"}
+
 
 class CreateLogView(CreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request, *args, **kwargs):
-        '''if request.user.is_anonymous:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)'''
+        if request.user.is_anonymous:
+            return Response(data=invalid_user_error, status=status.HTTP_401_UNAUTHORIZED)
 
         serializer = LogSerializer(
             data=request.data,
@@ -40,7 +43,7 @@ class LogView(RetrieveUpdateDestroyAPIView):
             log = Log.objects.get(pk=kwargs["log_id"])
         except Log.DoesNotExist:
             return Response(
-                data="Log does not exist",
+                data=invalid_log_error,
                 status=status.HTTP_404_NOT_FOUND
             )
 
@@ -54,12 +57,13 @@ class LogView(RetrieveUpdateDestroyAPIView):
             log = Log.objects.get(pk=kwargs["log_id"])
         except Log.DoesNotExist:
             return Response(
-                data="Log does not exist",
+                data=invalid_log_error,
                 status=status.HTTP_404_NOT_FOUND
             )
 
         if request.user != log.author:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
+            return Response(data=invalid_user_error,
+                            status=status.HTTP_401_UNAUTHORIZED)
 
         serializer = LogSerializer(
             log,
@@ -75,12 +79,39 @@ class LogView(RetrieveUpdateDestroyAPIView):
                 return Response(json, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, request, *args, **kwargs):
+        try:
+            log = Log.objects.get(pk=kwargs["log_id"])
+        except Log.DoesNotExist:
+            return Response(
+                data=invalid_log_error,
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        if request.user != log.author:
+            return Response(data=invalid_user_error, status=status.HTTP_401_UNAUTHORIZED)
+
+        log.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class UploadFileView(CreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     parser_classes = [MultiPartParser, FormParser]
 
     def post(self, request, *args, **kwargs):
+
+        try:
+            log = Log.objects.get(pk=kwargs["log_id"])
+        except Log.DoesNotExist:
+            return Response(
+                data=invalid_log_error,
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        if request.user != log.author:
+            return Response(data=invalid_user_error, status=status.HTTP_401_UNAUTHORIZED)
 
         data = request.data
         data["file"] = request.FILES.get("file")
