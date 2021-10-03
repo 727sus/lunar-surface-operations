@@ -36,7 +36,10 @@ class LogConsumer(AsyncWebsocketConsumer):
         # Untracked usernames are by default subscribed,
         # boolean values within the dict indicates whether the current websocket is
         # subscribed or unsubscribed to the other user
-        self.tracked_usernames = {}
+
+        if 'tracked_usernames' not in self.scope['session']:
+            self.scope['session']['tracked_usernames'] = {}
+            self.scope['session'].save()
 
         # Add ourselves to the group
         await self.channel_layer.group_add(
@@ -65,9 +68,12 @@ class LogConsumer(AsyncWebsocketConsumer):
         if 'type' in text_data_json:
             if text_data_json['type'] == 'subscribe':
                 # We don't care whether this suceeds or not
-                self.tracked_usernames[text_data_json['username']] = True
+                self.scope['session']['tracked_usernames'][text_data_json['username']] = True
             elif text_data_json['type'] == 'unsubscribe':
-                self.tracked_usernames[text_data_json['username']] = False
+                self.scope['session']['tracked_usernames'][text_data_json['username']] = False
+
+            # Save the session
+            self.scope['session'].save()
             return
 
         # If we reached here, then consumer prompted for 'send'
@@ -80,7 +86,7 @@ class LogConsumer(AsyncWebsocketConsumer):
             })
 
     async def relay_log_contents(self, event):
-        if event['sender'] in self.tracked_usernames and self.tracked_usernames[event['sender']] == False:
+        if event['sender'] in self.scope['session']['tracked_usernames'] and self.scope['session']['tracked_usernames'][event['sender']] == False:
             return
 
         await self.send(text_data=json.dumps({'message': event['log_contents']}))
