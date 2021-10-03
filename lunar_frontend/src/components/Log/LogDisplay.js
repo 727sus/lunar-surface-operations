@@ -10,7 +10,7 @@ const LogDisplay = () => {
         color="brand.accent2"
         bg="brand.secondary"
         align="end"
-        h="88.5vh"
+        h="87.5vh"
         overflow="auto"
       >
         <Flex grow="1">
