@@ -183,6 +183,7 @@ class LogModelTest(APITestCase):
 
         response = self.client.post(
             upload_file, data=payload, format="multipart")
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Try upload 2nd time to test file association
